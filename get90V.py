@@ -9,7 +9,7 @@ import requests
 from bs4 import BeautifulSoup
 
 url = 'https://v.qq.com/x/search/?q=%E6%96%97%E7%BD%97%E5%A4%A7%E9%99%86&stag=0&smartbox_ab='
-parseUrl = 'https://jx.parwix.com:4433/player/?url='
+parseUrl = 'https://jx.aidouer.net/?url='
 
 def cUrl():
     pass

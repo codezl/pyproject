@@ -9,7 +9,7 @@ site_name = form.getvalue('name')
 site_url = form.getvalue('url')
 
 print("Content-type:text/html")
-print()
+print
 print("<html>")
 print("<head>")
 print("<meta charset=\"utf-8\">")
