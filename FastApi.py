@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from fastapi import FastAPI
-from get90V import resBody, getRewriteUrl, resolveTxSelectVideo
-
+from get90V import resBody, getRewriteUrl
+from get90V import resolveTxSelectVideo
 app = FastAPI()
 
 
@@ -19,6 +19,17 @@ def getVsearch(name: str = ''):
     return resBody(url)
 
 
+# 根据剧集换取列表（txx）
+@app.get("/v/getList/playId={playId}")
+def getTxPlayList(playId: str = ''):
+    # 变量名字要和{}中的名字一致
+    # 'https://v.qq.com/x/cover/m441e3rjq9kwpsc.html'
+    url = 'https://v.qq.com/x/cover/' + playId + '.html'
+    print('拼接地址'+url)
+    # res = resolveTxSelectVideo(url)
+    return resolveTxSelectVideo(url)
+
+
 @app.get('')
 def getVlist():
     pass
@@ -29,5 +40,5 @@ if __name__ == '__main__':
 
     uvicorn.run(app=app,
                 host="0.0.0.0",
-                port=8080,
+                port=8082,
                 workers=1)
