@@ -11,6 +11,7 @@ from urllib import request
 
 url = 'https://v.qq.com/x/search/?q=%E6%96%97%E7%BD%97%E5%A4%A7%E9%99%86&stag=0&smartbox_ab='
 parseUrl = 'https://jx.aidouer.net/?url='
+txVidBaseUrl = 'https://v.qq.com/x/cover'
 
 
 def cUrl():
@@ -36,7 +37,7 @@ def resBody(url1):
         print(i['href'])
         print(i)
     for i2 in vl:
-        # print(i2)
+        print(i2)
         ele = {}
         if len(i2.select('.hl')) > 0:
             # print(i2.select('.hl')[0].text)
@@ -55,27 +56,50 @@ def resBody(url1):
 
 
 # 解析tx
-def resolveTxSelectVideo(vurl):
+def resolveTxSelectVideo(vUrl):
     # res = getRes('https://v.qq.com/x/cover/mzc00200js3mdvw/q00354i139r.html')
-    rewriteUrl = getRewriteUrl(vurl)
+    rewriteUrl = getRewriteUrl(vUrl)
     res = getRes(rewriteUrl)
     soup = BeautifulSoup(res.text, 'lxml')
-    print(res.url)
+    listItem = soup.find_all('div', {'class': 'episode-item-rect--number'})
+    # print(listItem)
+    playUrls = []
+    if (len(listItem)) == 0:
+        return '未找到数据'
+    for item in listItem:
+        playUrl = txVidBaseUrl + '/' + item['data-cid'] + '/' + item['data-vid'] + '.html'
+        # print(playUrl)
+        playUrls.append(playUrl)
+    # print(playUrls)
+    return playUrls
 
 
 # 获取重定向地址（有些搜索结果点击之后跳转的是重定向地址）
-def getRewriteUrl(baseUrl):
+def getRewriteUrl(baseUrl=""):
     # 重定向地址
-    res = requests.get('https://v.qq.com/x/cover/mzc00200js3mdvw/q00354i139r.html')
-    session = requests.session()
-    res = requests.get('https://v.qq.com/x/cover/mzc00200js3mdvw/q00354i139r.html')
+    # 如果有代理要加代理地址
+    # headers = {'User-Agent': 'xx代理'}
+    # session = requests.session()
+    # res = session.get('https://v.qq.com/x/cover/mzc00200js3mdvw/q00354i139r.html')
+    res = requests.get(baseUrl)
     print('重定向1'+res.url)
     return res.url
-    # 无效
-    # rwurl = request.urlopen('https://v.qq.com/x/cover/mzc00200js3mdvw/q00354i139r.html')
+
+
+def getRewriteUel2(baseUrl):
+    # 下面方法拿到结果不正确，无效
+    rwurl = request.urlopen('https://v.qq.com/x/cover/mzc00200js3mdvw/q00354i139r.html')
     # rwurl = request.urlopen(baseUrl)
-    # print('重定向2'+rwurl.geturl()+'\n')
-    # return rwurl.geturl()
+    print('重定向2' + rwurl.geturl() + '\n')
+    return rwurl.geturl()
+
+
+# 以下是关于vip解析地址的方法
+# 将视频播放地址转换成解析地址
+def exchangePlayUrl(baseUrl, vipUrl):
+    # vipPlayUrl = vipUrl + baseUrl
+    # 暂时用同一个地址
+    return parseUrl+baseUrl
 
 
 def saveFile():
@@ -100,5 +124,6 @@ def newDir():
 if __name__ == "__main__":
     urls = resBody('https://v.qq.com/x/search/?q=%E6%96%97%E7%BD%97%E5%A4%A7%E9%99%86&stag=0&smartbox_ab=')
     print(urls)
-    resolveTxSelectVideo('https://v.qq.com/x/cover/m441e3rjq9kwpsc.html')
+    # resolveTxSelectVideo('https://v.qq.com/x/cover/m441e3rjq9kwpsc') # 没.html结尾时会警告
     getRewriteUrl('https://v.qq.com/x/cover/m441e3rjq9kwpsc.html')
+    resolveTxSelectVideo('https://v.qq.com/x/cover/m441e3rjq9kwpsc.html')
