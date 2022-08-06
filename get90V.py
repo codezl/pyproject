@@ -67,7 +67,10 @@ def resolveTxSelectVideo(vUrl):
     if (len(listItem)) == 0:
         return '未找到数据'
     for item in listItem:
-        playUrl = txVidBaseUrl + '/' + item['data-cid'] + '/' + item['data-vid'] + '.html'
+        # print(repr(item.select('span')[0].text))
+        playUrl = {}
+        playUrl['num'] = item.select('span')[0].text
+        playUrl['url'] = txVidBaseUrl + '/' + item['data-cid'] + '/' + item['data-vid'] + '.html'
         # print(playUrl)
         playUrls.append(playUrl)
     # print(playUrls)
