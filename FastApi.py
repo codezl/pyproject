@@ -2,7 +2,7 @@
 
 from fastapi import FastAPI
 from get90V import resBody, getRewriteUrl
-from get90V import resolveTxSelectVideo
+from get90V import resolveTxSelectVideo, exchangePlayUrl
 app = FastAPI()
 
 
@@ -30,9 +30,22 @@ def getTxPlayList(playId: str = ''):
     return resolveTxSelectVideo(url)
 
 
+@app.get("/v/getVipUrl")
+def getVipUrl(playId: str = ''):
+    # url = 'https://v.qq.com/x/cover/' + playId + '.html'
+    playId = playId + '.html'
+    vipUrl = exchangePlayUrl(playId, "")
+    return resDto(vipUrl, 200, 'ok')
+
+
 @app.get('')
 def getVlist():
     pass
+
+
+def resDto(data, code, msg):
+    res = {'code': code, 'msg': msg, 'data': data}
+    return res
 
 
 if __name__ == '__main__':

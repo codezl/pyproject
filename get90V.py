@@ -105,6 +105,14 @@ def exchangePlayUrl(baseUrl, vipUrl):
     return parseUrl+baseUrl
 
 
+# 获取解析的链接和其它一些参数（比如解析的方式）
+
+
+# 根据前端选择的解析地址拼接播放地址和解析方式，解析返回播放地址
+def cahngePlayUrl2(baseUrl, vipUrl, resolveMethod):
+    pass
+
+
 def saveFile():
     fo = open('test2.txt', 'a')
     print(fo.name)
