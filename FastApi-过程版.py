@@ -3,8 +3,6 @@ import base64
 import encodings.utf_8
 import io
 import os
-from typing import Union
-
 import cv
 import cv2
 # 转码
@@ -14,7 +12,6 @@ import codecs
 import numpy as np
 from PIL import Image
 from fastapi import FastAPI
-from pydantic import BaseModel
 from starlette.responses import FileResponse, HTMLResponse, StreamingResponse
 
 from get90V import resBody, getRewriteUrl
@@ -22,13 +19,6 @@ from get90V import resolveTxSelectVideo, exchangePlayUrl
 from django.http.response import HttpResponse
 from Smiles2img import smlies2ImgBs64,smlies2ImgBs642
 app = FastAPI()
-
-
-class Item(BaseModel):
-    smi: str
-    description: Union[str, None] = None
-    price: Union[float, None] = None
-    tax: Union[float, None] = None
 
 
 @app.get('/test/a={a}/b={b}')
@@ -85,27 +75,19 @@ def getVlist(request):
     #                    )
     res = HttpResponse(content=fileOpen, content_type='image/png')
     # res.headers = {}
-    return res
+    return imgBs4
     # return StreamingResponse(fileOpen.read())
-    # return StreamingResponse(fileOpen, media_type="image/png")
+    return StreamingResponse(fileOpen, media_type="image/png")
     # pass
     #
     # return FileResponse(fileOpen.read(), filename='123.png')
-    # return FileResponse(r"C:\Users\ll\Desktop\店铺组合图.png", media_type="image/png", filename='111')
+    return FileResponse(r"C:\Users\ll\Desktop\店铺组合图.png", media_type="image/png", filename='111')
 
 
 @app.get('/smi2base64')
 def smi2base64(smi):
     smis = [smi]
     return smlies2ImgBs64(smis)
-
-
-@app.post('/smi2bs64/')
-def smi2base64(item: Item):
-    smis = [item.smi]
-    # 'data:image/png;base64,'+
-    bs64 = smlies2ImgBs64(smis)
-    return bs64
 
 
 @app.get('/smi2base642')
@@ -140,7 +122,7 @@ def getByte(smi):
     img_bytes = io.BytesIO()
     img_file = io.FileIO()
     # 将图片数据存入字节流管道， format可以按照具体文件的格式填写
-    img.save(img_bytes, format="JPEG")
+    img.save(img_bytes, format="png")
     # 从字节流管道中获取二进制
     image_bytes = img_bytes.getvalue()
     image = Image.open(io.BytesIO(image_bytes), mode='r')
@@ -177,25 +159,12 @@ def getByte(smi):
     # return HttpResponse(content=fileO.read(), content_type='image/png')
 
 
-@app.get('/img3')
-def getBs64():
-    smis = ['NNN']
-    img = smlies2ImgBs642(smis)
-    image = img.crop([8, 8, 120, 120])
-    image = np.asarray(image)
-    # img_byte = image.tobytes().decode('UTF-32')  # 转换为二进制
-    # base64_str = base64.b64encode(img_byte).decode("utf-8")  # 转换为base64
-    # return base64_str
-    return HttpResponse(img.tobytes, content_type="image/png")
-
-
 # 返回html页面
 @app.get("/html")
 def user():
     url = 'http://localhost:8082/img?request=1'
     # url = """data:image/png;base64,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"""
     url1 = url+"123"
-    url = 'http://localhost:8082/img3'
     print(url1)
     html_content = """
     <html>
