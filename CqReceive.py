@@ -58,9 +58,14 @@ def send_msg(resp_dict):
     return 0
 
 
+def createMsg(msgType, number, msg):
+    return {'msg_type': msgType, 'number': number, 'msg': msg}
+
+
 while True:
     rev = rev_msg()
-    if rev["post_type"] == "message":
+    if rev is not None and rev["post_type"] == "message":
+        print('收到消息:'+rev["raw_message"])
         # print(rev) #需要功能自己DIY
         if rev["message_type"] == "private":  # 私聊
             if rev['raw_message'] == '在吗':
@@ -68,14 +73,17 @@ while True:
                 send_msg({'msg_type': 'private', 'number': qq, 'msg': '我在\n你呢'})
         elif rev["message_type"] == "group":  # 群聊
             group = rev['group_id']
-            if "[CQ:at,qq=机器人的QQ号]" in rev["raw_message"]:
+            if "[CQ:at,qq=3429171731]" in rev["raw_message"]:
+                qq = rev['sender']['user_id']
                 if rev['raw_message'].split(' ')[1] == '在吗':
-                    qq = rev['sender']['user_id']
                     send_msg({'msg_type': 'group', 'number': group, 'msg': '[CQ:poke,qq={}]'.format(qq)})
+                else:
+                    send_msg(createMsg('group', group, '[CQ:at,qq={}]'.format(qq)+' '+'有什么事吗？'))
         else:
             continue
     else:  # rev["post_type"]=="meta_event":
         continue
+
 
 if __name__ == "__main__":
     pass

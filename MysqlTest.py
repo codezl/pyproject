@@ -6,15 +6,27 @@ import MySQLdb
 import pymysql as pymysql
 
 
-def conn(host,port,user,psw):
-    pymysql.connect
+# 方法一
+def conn(host, port, user, psw, database):
+    return pymysql.connect(host=host, user=user, port=port, password=psw, charset='utf8', database=database)
+
+
+def tstCon():
+    con = conn('localhost', 3306, 'root', 'root', 'test')
+    cur = con.cursor()
+    cur.execute('select * from user')
+    data = cur.fetchall()
+    print(data)
+
+
+# 方法二
+db = MySQLdb.connect(host="localhost",
+                     user="root",
+                     password="root",
+                     db="test")
 
 
 def conn1():
-    db = MySQLdb.connect(host="localhost",
-                         user="root",
-                         password="root",
-                         db="test")
     cursor = db.cursor()
 
     # 使用execute方法执行SQL语句
@@ -29,5 +41,6 @@ def conn1():
     db.close()
 
 
-if __name__ == "__main__":
-    conn1()
+# if __name__ == "__main__":
+    # conn1()
+    # tstCon()
