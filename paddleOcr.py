@@ -143,9 +143,7 @@ def scanImg2Word(file: object) -> object:
                         lang="ch")  # need to run only once to download and load model into memory
         result = ocr.ocr(app.config['UPLOAD_FOLDER'] + file.filename, cls=True)
         os.remove(app.config['UPLOAD_FOLDER'] + file.filename)
-        print("长度" + str(result))
         resStr = ''
-        maxTup = ()
         for idx in range(len(result)):
             res = result[idx]
             for line in res:
