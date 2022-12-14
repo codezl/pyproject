@@ -12,6 +12,7 @@ tcpSerSock = socket(AF_INET, SOCK_STREAM)  # 创建socket连接（AF_INET表示I
 tcpSerSock.bind(ADDR)  # 绑定地址
 tcpSerSock.listen(5)  # 开始监听端口，参数5表示可以接收的连接数量
 
+
 while True:  # 循环接受多个客户端发来的请求
     try:
         print('Watting for connection...')
@@ -30,6 +31,7 @@ while True:  # 循环接受多个客户端发来的请求
     finally:
         tcpCliSock.close()
 tcpSerSock.close()
+
 
 if __name__ == '__main__':
     pass
