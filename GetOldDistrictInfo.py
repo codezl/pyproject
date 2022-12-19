@@ -61,7 +61,7 @@ def insertOldSql(cityname, citycode, belongcity):
 def insertNewSql(cityname, citycode, address, belongcity, is_old):
     # 拼接sql语句时如果有数字类型要转成str字符类型
     sqlEx = 'insert into district_info(`name`, `address`, `district_code`,`belong_district`, is_old) ' \
-            'values(\''+cityname+'\',\''+citycode+'\',\''+address+'\',\''+belongcity+'\',\''+str(is_old)+'\')'
+            'values(\''+cityname+'\',\''+address+'\',\''+citycode+'\',\''+belongcity+'\',\''+str(is_old)+'\')'
     return sqlEx
 
 
