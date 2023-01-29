@@ -76,7 +76,7 @@ def insertNew(item: Item):
     now_conn = sqlConn()
     cur = now_conn.cursor()
     for i in item.districtList:
-        print(i['cityName'])
+        # print(i['cityName'])
         ex = insertNewSql(i['cityName'], i['code'], i['address'], i['belongDistrict'], i['isOld'])
         # 避免重复插入设置唯一键或者验证
         cur.execute(ex)
