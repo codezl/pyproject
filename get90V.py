@@ -133,7 +133,7 @@ def newDir():
 
 
 if __name__ == "__main__":
-    urls = resBody('https://v.qq.com/x/search/?q=%E6%96%97%E7%BD%97%E5%A4%A7%E9%99%86&stag=0&smartbox_ab=')
+    urls = resBody('https://v.qq.com/x/search/?q=汪汪队&stag=0&smartbox_ab=')
     print(urls)
     # resolveTxSelectVideo('https://v.qq.com/x/cover/m441e3rjq9kwpsc') # 没.html结尾时会警告
     getRewriteUrl('https://v.qq.com/x/cover/m441e3rjq9kwpsc.html')

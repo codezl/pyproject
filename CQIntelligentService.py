@@ -118,12 +118,16 @@ while True:
             send_msg({'msg_type': 'private', 'number': qq, 'msg': repMsg})
         elif rev["message_type"] == "group":  # 群聊
             group = rev['group_id']
+            # 从词库中找回答
+            repMsg = getRepFromDB(rev['raw_message'].split(' ')[1])
             if CQVar.IS_MENU:
-                send_msg(createMsg('group', group, '在菜单中'))
                 if '退出菜单' in rev["raw_message"]:
                     CQVar.IS_MENU = False
+                    send_msg(createMsg('group', group, '退出菜单'))
+                else:
+                    send_msg(createMsg('group', group, '在菜单中'))
                 continue
-            if "[CQ:at,qq=3429171731]" in rev["raw_message"]:
+            if "[CQ:at,qq=339842550]" in rev["raw_message"]:
                 qq = rev['sender']['user_id']
                 # 测试表情
                 # send_msg(createMsg('group', group, '[CQ:at,qq={}] [CQ:face,id=123]').format(qq))
@@ -134,7 +138,7 @@ while True:
                     if rev['raw_message'].split(' ')[1] == '':
                         send_msg(createMsg('group', group, '[CQ:at,qq={}]'.format(qq) + ' ' + repMsg))
                         continue
-                    elif "[CQ:poke,qq=3429171731]" in rev["raw_message"]:
+                    elif "[CQ:poke,qq=339842550]" in rev["raw_message"]:
                         send_msg(createMsg('group', group, '[CQ:poke,qq={}]'.format(qq)))
                         continue
                     elif rev['raw_message'].split(' ')[1] == '菜单':
@@ -152,6 +156,7 @@ while True:
                             send_msg(createMsg('group', group, '菜单未创建呢，请先创建菜单'))
                             continue
                     else:
+                        send_msg(createMsg('group', group, '[CQ:at,qq={}]'.format(qq) + ' ' + repMsg))
                         # 其它一些智能指令
                         pass
         else:
